@@ -113,3 +113,30 @@ Here is an example of a git project using a makefile :
         }
 }
 ```
+
+Launch tasks
+=============
+Tasks must be launched through Fabric fab command in the same folder of fabfile.py.
+
+List available tasks
+--------------------
+```
+#>fab -l
+Available commands:
+
+    code_style.check_codestyle  Check code style via PHPMess Detector and PHP...
+    settings.load_settings      Load main settings and given project specific...
+    update.check_update         Check contrib modules and core updates from s...
+    versionning.checkout        Checkout project sources according to vcs con...
+```
+
+Launch Drupal updates check 
+---------------------------
+```
+#>fab settings.load_settings:project=myproject_git versionning.checkout update.check_update:send_mail=True
+```
+Launch Drupal code style check 
+-------------------------------
+```
+#>fab settings.load_settings:project=myproject_git versionning.checkout code_style.check_codestyle:email=True
+```
