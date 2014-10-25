@@ -146,5 +146,5 @@ Security issues are published every Wednesday, you can check every Thursday, ear
 availability.
 To do that, edit your crontab :
 ```
-0 1 * * 4 cd /path/to/sauron && fab settings.load_settings:project=myproject_git versionning.checkout update.check_update:send_mail=True >> /dev/null
+0 1 * * 4 <user> cd /path/to/sauron && fab settings.load_settings:project=myproject_git versionning.checkout update.check_update:send_mail=True > /dev/null 2>&1
 ```
