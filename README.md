@@ -140,3 +140,11 @@ Launch Drupal code style check
 ```
 #>fab settings.load_settings:project=myproject_git versionning.checkout code_style.check_codestyle:email=True
 ```
+Schedule Drupal updates check every Thursday morning 
+----------------------------------------------------
+Security issues are published every Wednesday, you can check every Thursday, early in the morning, modules updates 
+availability.
+To do that, edit your crontab :
+```
+0 1 * * 4 cd /path/to/sauron && fab settings.load_settings:project=myproject_git versionning.checkout update.check_update:send_mail=True >> /dev/null
+```
