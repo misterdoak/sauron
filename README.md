@@ -148,3 +148,8 @@ To do that, edit your crontab :
 ```
 0 1 * * 4 <user> cd /path/to/sauron && fab settings.load_settings:project=myproject_git versionning.checkout update.check_update:send_mail=True > /dev/null 2>&1
 ```
+
+Roadmap
+========
++ Add hacked check - Check if a contrib module or core has been modified
++ Propose other report formats other than HTML
