@@ -33,10 +33,10 @@ def send_mail(send_from, send_to, subject, text, files=[], html=False, server="l
     part1 = ''
     if html:
         text += "<br>" + get_mail_signature(True)
-        part1 = MIMEText(text, 'html')
+        part1 = MIMEText(text, 'html', "utf-8")
     else:
         text += "\n" + get_mail_signature()
-        part1 = MIMEText(text, 'text')
+        part1 = MIMEText(text, 'plain', "utf-8")
     
     msg.attach(part1)
 

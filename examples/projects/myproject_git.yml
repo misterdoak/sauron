@@ -1,20 +1,14 @@
 {
     "project": "My project",
-    "mail": ["almor@smile.fr"],
+    "mail": ["<email>"],
 
     "vcs": {
         "type": "git",
-        "url": "git@github.com:AlanMoreau/sauron.git",
+        "url": "git@github.com:misterdoak/sauron.git",
         "extra_args": "-b master"
     },
 
     "drupal": {
-        "drupal_root": "cpf",
-        "contrib_paths": ["sites/all/modules/contrib"],
-        "dev_paths": ["sites/all/themes/custom"],
-        "code_style":{
-          "phpcs_standard":"/home/almor/phpqa/codesniffer/Drupal",
-          "phpmd_rules_file":"/home/almor/phpqa/phpmd/phpmd.xml",
-        }
+        "drupal_makefile": "examples/makefile/sauron.make"
     }
 }

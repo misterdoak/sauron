@@ -1,4 +1,4 @@
-![Sauron logo](https://raw.githubusercontent.com/AlanMoreau/sauron/master/images/sauron.png)
+![Sauron logo](https://raw.githubusercontent.com/misterdoak/sauron/master/images/sauron.png)
 Sauron 
 =======
 
@@ -19,7 +19,7 @@ Sauron is a python 2.7 application built on top of [Fabric framework](http://www
 
 Example of HTML report
 
-![Capture-1](https://raw.githubusercontent.com/AlanMoreau/sauron/master/images/capture-1.png)
+![Capture-1](https://raw.githubusercontent.com/misterdoak/sauron/master/images/capture-1.png)
 
 
 Install
@@ -29,7 +29,7 @@ On Debian based distribution
 ```
 #>sudo aptitude install python2.7 python2.7-dev python-pip build-essential
 #>sudo pip install fabric pyyaml requests HTML.py
-#>git clone git@github.com:AlanMoreau/sauron.git
+#>git clone git@github.com:misterdoak/sauron.git
 ```
 
 After installing Sauron, you need to edit main settings file : *config/sauron.xml*
@@ -79,7 +79,7 @@ For example :
 
     "vcs": {
         "type": "svn",
-        "url": "https://github.com/AlanMoreau/sauron/trunk",
+        "url": "https://github.com/misterdoak/sauron/trunk",
         "extra_args": ""
     },
 
@@ -104,13 +104,12 @@ Here is an example of a git project using a makefile :
 
         "vcs": {
             "type": "git",
-            "url": "git@github.com:AlanMoreau/sauron.git",
+            "url": "git@github.com:misterdoak/sauron.git",
             "extra_args": "-b master"
         },
 
         "drupal": {
-            "drupal_root": "examples/makefile"
-            "drupal_makefile": "sauron.make"
+            "drupal_makefile": "examples/makefile/sauron.make"
         }
 }
 ```

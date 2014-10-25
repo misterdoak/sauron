@@ -1,16 +1,15 @@
 {
     "project": "My project",
-    "mail": ["almor@smile.fr"],
+    "mail": ["<email>"],
 
     "vcs": {
-        "type": "svn", #git or svn
-        "url": "https://github.com/AlanMoreau/sauron/trunk",
-        "git_branch": "master",
+        "type": "svn",
+        "url": "https://github.com/misterdoak/sauron/trunk",
         "extra_args": ""
     },
 
     "drupal": {
-        "drupal_root": "examples/no_makefile/druapl-7.32",
+        "drupal_root": "examples/no_makefile/drupal-7.32",
         "contrib_paths": ["sites/all/modules/contrib"],
         "dev_paths": ["sites/all/themes/custom"],
         "code_style":{
