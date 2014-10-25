@@ -1,5 +1,6 @@
-![Sauron logo](https://raw.githubusercontent.com/AlanMoreau/sauron/master/images/sauron.png) Sauron 
-==================================================================================================
+![Sauron logo](https://raw.githubusercontent.com/AlanMoreau/sauron/master/images/sauron.png)
+Sauron 
+=======
 
 > + You are a **Drupal** developper and you need to be aware of modules and core updates? **Sauron can help you!**
 
