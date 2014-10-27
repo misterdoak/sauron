@@ -100,7 +100,7 @@ Here is an example of a git project using a makefile :
 
 {
         "project": "My project",
-        "mail": ["<email>r"],
+        "mail": ["<email>"],
 
         "vcs": {
             "type": "git",
