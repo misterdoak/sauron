@@ -2,7 +2,7 @@
 Sauron
 =======
 
-> + You are a **Drupal** developper and you need to be aware of modules and core updates? **Sauron can help you!**
+> + You are a **Drupal** developer and you need to be aware of modules and core updates? **Sauron can help you!**
 
 > + You maintain a bunch of **Drupal** Web sites and need to get updates reports? **Sauron can help you!**
 
@@ -15,7 +15,7 @@ About
 
 Sauron is a python 2.7 application built on top of [Fabric framework](http://www.fabfile.org/). It provides a few tasks to deal with Drupal :
 + Generate a report of available updates for modules and core
-+ Run PHP_CodeSniffer and PHP_MessDetector of specific developpment
++ Run PHP_CodeSniffer and PHP_MessDetector of specific development
 
 Example of HTML report
 
@@ -45,7 +45,7 @@ After installing Sauron, you need to copy main settings file : *config/sauron_ex
     "application": {
         "projects_path": "<path where projects files are stored>",
         "sandbox_path": "<path where projects are checkout>",
-        "report_path": "<path where reports wiil be stored>"
+        "report_path": "<path where reports will be stored>"
     }
 }
 ```
@@ -56,7 +56,7 @@ Using Sauron for your project(s)
 
 For each project, you will need to create a <choose_name_project>.yml file. This contains information about your project :
 + project : project name
-+ mail : list of recepients for sending report
++ mail : list of recipients for sending report
 + vcs : Sauron can fetch sources from Git OR Subversion
     + type : svn or git
     + url : svn url or git url
