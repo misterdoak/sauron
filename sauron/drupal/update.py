@@ -161,13 +161,17 @@ def get_module_update_info(module, version, core_version_major):
 
     """ Call update service """
     content = requests.get(url + '/' + module + '/' + core_version_major + '.x')
-    
+
     root = ET.fromstring(content.text.encode('ascii', 'ignore'))
     title = root.find('title')
     if ET.iselement(title):
         releases = root.find('releases')
+        recommended_major = root.find('recommended_major')
+        if ET.iselement(recommended_major):
+            recommended_major = recommended_major.text
         last_bug_fix = ''
         last_security_fix = ''
+        last_recommended = ''
         last_bug_rank = 0
         last_security_rank = 0
         current_rank = 0
@@ -182,6 +186,8 @@ def get_module_update_info(module, version, core_version_major):
                     continue
                 if v == version:
                     current_rank = rank
+                if major_v == recommended_major and last_recommended == '':
+                    last_recommended = v
                 terms = release.findall(".//terms/term")
                 for term in terms:
                     if term.find('name').text == 'Release type':
@@ -199,8 +205,9 @@ def get_module_update_info(module, version, core_version_major):
         info['last_security_rank'] = last_security_rank
         info['last_bug_fix'] = last_bug_fix
         info['last_bug_rank'] = last_bug_rank
+        info['last_recommended'] = last_recommended
         info['current_rank'] = current_rank
-    
+
     return info
 
 
@@ -215,17 +222,17 @@ def generate_report(core_info, module_infos):
         0 => True if security issue has been detected, False otherwise
         1 => HTML report
     """
-    header = ['Module', 'Installed version', 'Last security update version', 'Last bug fix version']
+    header = ['Module', 'Installed version', 'Last security update version', 'Last bug fix version', 'Last recommended version']
     has_sec_issue = False
     colors = ['#DDFFDD', '#FFFFDD', '#FFCCCC']
-    
+
     core_table = HTML.Table(header_row=header)
     issue_level = _has_issue(core_info)
     if issue_level == 2:
         has_sec_issue = True
     row = [core_info['title'], core_info['current_version'], core_info['last_security_fix'], core_info['last_bug_fix']]
     trow = HTML.TableRow(row, bgcolor=colors[issue_level])
-    
+
     core_table.rows.append(trow)
 
     modules_table = HTML.Table(header_row=header)
@@ -234,14 +241,14 @@ def generate_report(core_info, module_infos):
         if issue_level == 2:
             has_sec_issue = True
 
-        row = [info['title'], info['current_version'], info['last_security_fix'], info['last_bug_fix']]
+        row = [info['title'], info['current_version'], info['last_security_fix'], info['last_bug_fix'], info['last_recommended']]
         trow = HTML.TableRow(row, bgcolor=colors[issue_level])
-        
+
         modules_table.rows.append(trow)
-    
+
     head = "This is the update status report of your site " + env.project['project']
     content = head + "<br /><br />" + str(core_table) + "<br /><br />" + str(modules_table)
-    
+
     return has_sec_issue, content
 
 
