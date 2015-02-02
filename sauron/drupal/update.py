@@ -18,11 +18,13 @@ def check_update(send_mail=False):
     Check contrib modules and core updates from source code or from makefile
     send_mail -- True if the report has to be sent by email, False otherwise
     """
+    contrib_modules_per_path = {}
     modules_infos_per_path = {}
     if 'drupal_makefile' in env.project['drupal']:
         makefile = env.sauron['application']['sandbox_path'] + '/' + env.project['name'] + '/' \
             + env.project['drupal']['drupal_makefile']
         core_version, contrib_modules = get_core_and_modules_from_makefile(makefile)
+        contrib_modules_per_path['contrib modules'] = contrib_modules
     else:
         drupal_root = env.sauron['application']['sandbox_path'] + '/' + env.project['name'] \
             + '/' + env.project['drupal']['drupal_root']
