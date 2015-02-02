@@ -18,29 +18,34 @@ def check_update(send_mail=False):
     Check contrib modules and core updates from source code or from makefile
     send_mail -- True if the report has to be sent by email, False otherwise
     """
-    modules_infos = []
+    contrib_modules_per_path = {}
+    modules_infos_per_path = {}
     if 'drupal_makefile' in env.project['drupal']:
         makefile = env.sauron['application']['sandbox_path'] + '/' + env.project['name'] + '/' \
             + env.project['drupal']['drupal_makefile']
         core_version, contrib_modules = get_core_and_modules_from_makefile(makefile)
+        contrib_modules_per_path['contrib modules'] = contrib_modules
     else:
         drupal_root = env.sauron['application']['sandbox_path'] + '/' + env.project['name'] \
             + '/' + env.project['drupal']['drupal_root']
         core_version = get_core_version(drupal_root)
-        contrib_modules = get_contrib_modules(drupal_root)
+        contrib_modules_per_path = get_contrib_modules(drupal_root)
 
     core_version_major = core_version.split('.')[0]
-    for module, version in contrib_modules.items():
-        info = get_module_update_info(module, version, core_version_major)
-        if 'title' in info:
-            info['machine_name'] = module
-            info['current_version'] = version
-            modules_infos.append(info)
+    for path, contrib_modules in contrib_modules_per_path.items():
+        modules_infos = []
+        for module, version in contrib_modules.items():
+            info = get_module_update_info(module, version, core_version_major)
+            if 'title' in info:
+                info['machine_name'] = module
+                info['current_version'] = version
+                modules_infos.append(info)
+        modules_infos_per_path[path] = modules_infos
 
     core_info = get_module_update_info('drupal', core_version, core_version_major)
     core_info['current_version'] = core_version
 
-    has_sec_issue, body = generate_report(core_info, modules_infos)
+    has_sec_issue, body = generate_report(core_info, modules_infos_per_path)
 
     report_foler = env.sauron['application']['report_path'] + '/' + env.project['name']
     report_file = datetime.datetime.now().strftime("%Y%m%d%H%M") + '_drupal_update_report.html'
@@ -112,8 +117,9 @@ def get_contrib_modules(drupal_root):
     return a dict:
         ['<module name>' => '<module_version>']
     """
-    contrib_modules = {}
+    contrib_modules_per_path = {}
     for path in env.project['drupal']['contrib_paths']:
+        contrib_modules = {}
         contrib = drupal_root + '/' + path
         modules = os.listdir(contrib)
 
@@ -130,7 +136,8 @@ def get_contrib_modules(drupal_root):
                             basename = os.path.basename(f)
                             name = basename.split('.')[0]
                             contrib_modules[name] = version[0]
-    return contrib_modules
+            contrib_modules_per_path[path] = contrib_modules
+    return contrib_modules_per_path
 
 
 def get_module_update_info(module, version, core_version_major):
@@ -211,7 +218,7 @@ def get_module_update_info(module, version, core_version_major):
     return info
 
 
-def generate_report(core_info, module_infos):
+def generate_report(core_info, modules_infos_per_path):
     """
     Generate HTML report according to given modules and core info
 
@@ -235,19 +242,25 @@ def generate_report(core_info, module_infos):
 
     core_table.rows.append(trow)
 
-    modules_table = HTML.Table(header_row=header)
-    for info in module_infos:
-        issue_level = _has_issue(info)
-        if issue_level == 2:
-            has_sec_issue = True
+    modules_tables = {}
+    for path, module_infos in modules_infos_per_path.items():
+        modules_table = HTML.Table(header_row=header)
+        for info in module_infos:
+            issue_level = _has_issue(info)
+            if issue_level == 2:
+                has_sec_issue = True
 
-        row = [info['title'], info['current_version'], info['last_security_fix'], info['last_bug_fix'], info['last_recommended']]
-        trow = HTML.TableRow(row, bgcolor=colors[issue_level])
+            row = [info['title'], info['current_version'], info['last_security_fix'], info['last_bug_fix'], info['last_recommended']]
+            trow = HTML.TableRow(row, bgcolor=colors[issue_level])
 
-        modules_table.rows.append(trow)
+            modules_table.rows.append(trow)
+        modules_tables[path] = modules_table
 
     head = "This is the update status report of your site " + env.project['project']
-    content = head + "<br /><br />" + str(core_table) + "<br /><br />" + str(modules_table)
+    content = head + "<br /><br /><h1>Core</h1>" + str(core_table) + "<br /><br />"
+
+    for path, modules_table in modules_tables.items():
+        content += "<h1>" + path + "</h1>" + str(modules_table) + "<br /><br />"
 
     return has_sec_issue, content
 
@@ -311,4 +324,3 @@ def _has_issue(info):
     elif info['last_bug_rank'] != 0 and info['current_rank'] > info['last_bug_rank']:
         issue_level = 1
     return issue_level
-
