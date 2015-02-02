@@ -240,7 +240,7 @@ def generate_report(core_info, modules_infos_per_path):
 
     core_table.rows.append(trow)
 
-    modules_tables = []
+    modules_tables = {}
     for path, module_infos in modules_infos_per_path.items():
         modules_table = HTML.Table(header_row=header)
         for info in module_infos:
@@ -252,13 +252,13 @@ def generate_report(core_info, modules_infos_per_path):
             trow = HTML.TableRow(row, bgcolor=colors[issue_level])
 
             modules_table.rows.append(trow)
-        modules_tables.append(modules_table)
+        modules_tables[path] = modules_table
 
     head = "This is the update status report of your site " + env.project['project']
-    content = head + "<br /><br />" + str(core_table) + "<br /><br />"
+    content = head + "<br /><br /><h1>Core</h1>" + str(core_table) + "<br /><br />"
 
-    for modules_table in modules_tables:
-        content += str(modules_table) + "<br /><br />"
+    for path, modules_table in modules_tables.items():
+        content += "<h1>" + path + "</h1>" + str(modules_table) + "<br /><br />"
 
     return has_sec_issue, content
 
