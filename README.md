@@ -64,6 +64,7 @@ For each project, you will need to create a <choose_name_project>.yml file. This
 + drupal :
     + drupal_root : drupal root path relative to source code root path
     + contrib_paths : a list of contrib modules paths relative to drupal root path
+    + display : (optionnal) a list of issue levels to display among : all, bug, security, uptodate. If not precised, everything will be displayed.
     + drupal_makefile : path to makefile relative to drupal root path
     + dev_paths : a list of specific modules paths relative to drupal root path
     + code_style :
