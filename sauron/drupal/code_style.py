@@ -20,7 +20,7 @@ def check_codestyle(email=False):
 
     phpcs_standard = env.project['drupal']['code_style']['phpcs_standard']
     phpmd_rules_file = env.project['drupal']['code_style']['phpmd_rules_file']
- 
+
     phpcs_ext_args = ""
     phpmd_ext_args = ""
     if 'phpcs_extra_args' in env.project['drupal']['code_style']:
@@ -44,5 +44,6 @@ def check_codestyle(email=False):
             files.append(cs_report)
         if os.path.exists(phpmd_report):
             files.append(phpmd_report)
-        
-        utils.send_mail(env.sauron['administrator']['mail'], env.project['mail'], subject, body, files)
+
+        mail_server = utils.get_mail_server(env.sauron)
+        utils.send_mail(env.sauron['administrator']['mail'], env.project['mail'], subject, body, files, server=mail_server)
