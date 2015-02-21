@@ -54,8 +54,9 @@ def check_update(send_mail=False):
     write_html_report(report_foler, report_file, body, env.project['project'])
 
     if has_sec_issue or send_mail is not False:
+        mail_server = utils.get_mail_server(env.sauron)
         subject = '[' + env.project['project'] + '] Your site may have security issues'
-        utils.send_mail(env.sauron['administrator']['mail'], env.project['mail'], subject, body, [], True)
+        utils.send_mail(env.sauron['administrator']['mail'], env.project['mail'], subject, body, [], True, server=mail_server)
 
 
 def get_core_and_modules_from_makefile(makefile):
@@ -344,4 +345,3 @@ def _has_issue(info):
     elif info['last_bug_rank'] != 0 and info['current_rank'] > info['last_bug_rank']:
         issue_level = 1
     return issue_level
-
