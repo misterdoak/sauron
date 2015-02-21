@@ -3,6 +3,7 @@ import re
 import requests
 import datetime
 import codecs
+import collections
 from glob import glob
 
 import HTML
@@ -130,6 +131,9 @@ def get_contrib_modules(drupal_root):
                             basename = os.path.basename(f)
                             name = basename.split('.')[0]
                             contrib_modules[name] = version[0]
+
+    # Sort modules.
+    contrib_modules = collections.OrderedDict(sorted(contrib_modules.items()))
     return contrib_modules
 
 
