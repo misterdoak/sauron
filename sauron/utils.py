@@ -8,9 +8,17 @@ from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
+from subprocess import Popen, PIPE
 
+def get_mail_server():
+    """ Return SMTP according to sauron.yml
+    """
+    mail_server = 'localhost'    
+    if 'mail_server' in env.sauron['administrator']:
+        mail_server = env_sauron['administrator']['mail_server']
+    return mail_server
 
-def send_mail(send_from, send_to, subject, text, files=[], html=False, server="localhost"):
+def send_mail(send_from, send_to, subject, text, files=[], html=False):
     """ Send an email
 
         send_from -- sender email
@@ -46,11 +54,16 @@ def send_mail(send_from, send_to, subject, text, files=[], html=False, server="l
         Encoders.encode_base64(part)
         part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
         msg.attach(part)
-
-    smtp = smtplib.SMTP(server)
-    smtp.sendmail(send_from, send_to, msg.as_string())
-    smtp.close()
-
+    
+    server = get_mail_server()
+    if server.endswith('/sendmail'):
+        # Use sendmail instead of an SMTP server
+        p = Popen(["/usr/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
+        p.communicate(msg.as_string())
+    else:
+        smtp = smtplib.SMTP(server)
+        smtp.sendmail(send_from, send_to, msg.as_string())
+        smtp.close()
 
 def get_mail_signature(html=False):
     """ Return mail signature according to given format
