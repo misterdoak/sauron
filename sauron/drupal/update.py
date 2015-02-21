@@ -40,7 +40,8 @@ def check_update(send_mail=False):
             if 'title' in info:
                 info['machine_name'] = module
                 info['current_version'] = version
-                modules_infos.append(info)
+                if _must_display(info, env):
+                    modules_infos.append(info)
         modules_infos_per_path[path] = modules_infos
 
     core_info = get_module_update_info('drupal', core_version, core_version_major)
@@ -223,6 +224,20 @@ def get_module_update_info(module, version, core_version_major):
 
     return info
 
+def _must_display(info, env):
+    must_display = True
+    if 'display' in env.project['drupal']:
+        must_display = False
+        info_type_to_display = env.project['drupal']['display']
+        issue_level = _has_issue(info)
+
+        if (issue_level == 0 and 'uptodate' in info_type_to_display)\
+           or (issue_level == 1 and 'bug' in info_type_to_display)\
+           or (issue_level == 2 and 'security' in info_type_to_display)\
+           or ('all' in info_type_to_display):
+            must_display = True
+
+    return must_display
 
 def generate_report(core_info, modules_infos_per_path):
     """
