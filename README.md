@@ -1,3 +1,5 @@
+/!\ Sauron v2 developpment is launch see https://github.com/drupal-sauron/drupal-release-history /!\
+
 ![Sauron logo](https://raw.githubusercontent.com/misterdoak/sauron/master/images/sauron.png)
 Sauron
 =======
