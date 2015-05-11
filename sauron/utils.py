@@ -15,7 +15,7 @@ def get_mail_server():
     """
     mail_server = 'localhost'    
     if 'mail_server' in env.sauron['administrator']:
-        mail_server = env_sauron['administrator']['mail_server']
+        mail_server = env.sauron['administrator']['mail_server']
     return mail_server
 
 def send_mail(send_from, send_to, subject, text, files=[], html=False):
